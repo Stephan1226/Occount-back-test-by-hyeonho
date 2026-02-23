@@ -2,6 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './lib/swagger';
 
 import router from './routes';
 import { errorHandler } from './middleware/errorHandler';
@@ -15,6 +17,22 @@ app.use(cors({ origin: '*', credentials: true }));        // 개발 환경: 모�
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
+
+// =============================================
+// API Docs (Swagger UI)
+// =============================================
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customSiteTitle: 'Occount API Docs',
+    customCss: '.swagger-ui .topbar { background-color: #1a1a2e; }',
+    swaggerOptions: {
+      persistAuthorization: true,   // 새로고침해도 토큰 유지
+      defaultModelsExpandDepth: -1, // 하단 스키마 섹션 접기
+    },
+  }),
+);
 
 // =============================================
 // Health Check
