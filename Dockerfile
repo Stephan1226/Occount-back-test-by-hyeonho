@@ -27,6 +27,9 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
+# openssl 설치 (Prisma 엔진 런타임 의존성)
+RUN apk add --no-cache openssl
+
 # 프로덕션 의존성만 설치
 COPY package*.json ./
 RUN npm ci --omit=dev
